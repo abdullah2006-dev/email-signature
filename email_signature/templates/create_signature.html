@@ -1,0 +1,275 @@
+{% load countries %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Caansoft">
+    <title>Create Email Signature</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #444;
+            margin: 0;
+            padding: 0;
+            background-color: white-smoke;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: #002D62;
+        }
+        #header-right {
+            color: white;
+        }
+        header img {
+            max-height: 50px;
+        }
+        .container {
+            width: 70%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 27px;
+            color: rgba(0, 0, 0, 0.65);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="url"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button,
+        .button-link {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        button:hover,
+        .button-link:hover {
+            background-color: #0056b3;
+        }
+        .bottom-foot-wrapper {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px 0;
+            background-color: #002D62;
+        }
+        .menu-sub-footer-container ul {
+            list-style-type: none;
+            padding: 0;
+            color: white;
+        }
+        .menu-sub-footer-container li {
+            display: inline;
+            margin: 0 10px;
+        }
+        .menu-sub-footer-container a {
+            text-decoration: none;
+            color: #555;
+        }
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            background-color: black; /* Set background color to black */
+            border-radius: 50%; /* Optional: To make it round */
+        }
+    </style>
+</head>
+<body>
+    <div id="header-wrap">
+        <header id="header" class="clearfix">
+            <div id="header-left" class="clearfix" style="flex-grow: 1; display: flex; align-items: center;">
+                <a href="https://www.lindalgroup.com/" target="_blank" id="viewLogo">
+                    <img src="https://www.lindalgroup.com/site/wp-content/themes/Lindal/images/Lindal-Logo.svg" alt="">
+                </a>
+                <span class="innovation-text" style="color: white; margin-left: 1320px;">Your Innovation Partner</span>
+            </div>
+        </header>
+    </div>
+    <div class="container">
+        <h1>NEW EMAIL SIGNATURE</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="country-code">Country Code:</label>
+                    <select id="country-code" name="country_code" class="form-control">
+                        <option value="">Select Country Code</option>
+                        {% for country in countries %}
+                            <option value="{{ country.code }}">{{ country.name }} ({{ country.code }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="{{ form.mobile.id_for_label }}">Mobile Number:</label>
+                    {{ form.mobile }}
+                    {% for error in form.mobile.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="{{ form.phone.id_for_label }}">Phone Number:</label>
+                    {{ form.phone }}
+                    {% for error in form.phone.errors %}
+                        <div class="error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="{{ form.company.id_for_label }}">Company:</label>
+                    <select id="{{ form.company.id_for_label }}" name="{{ form.company.name }}" class="form-control">
+                        <option value="">Select Company</option>
+                        {% for company in companies %}
+                            <option value="{{ company.id }}">{{ company.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="{{ form.name.id_for_label }}">Name:</label>
+                    {{ form.name }}
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="{{ form.surname.id_for_label }}">Surname:</label>
+                    {{ form.surname }}
+                </div>
+            </div>
+           <br>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="{{ form.function.id_for_label }}">Function:</label>
+                    {{ form.function }}
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="{{ form.email.id_for_label }}">Email:</label>
+                    {{ form.email }}
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="{{ form.website.id_for_label }}">Website:</label>
+                    {{ form.website }}
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="{{ form.signature_type.id_for_label }}">Signature Type:</label>
+                    {{ form.signature_type }}
+                </div>
+            </div>
+
+            <div id="banner-container" class="form-group" style="display: none;">
+                <label>Select a Banner:</label>
+                <div id="bannerCarousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for banner_set in banners|slice:":4" %}
+                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                <div class="row">
+                                    {% for banner in banner_set %}
+                                        <div class="col-3">
+                                            <img src="{{ banner.image.url }}" class="d-block w-100" alt="{{ banner.image }}" data-id="{{ banner.id }}">
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev" href="#bannerCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#bannerCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+                <input type="hidden" id="{{ form.banner.id_for_label }}" name="{{ form.banner.name }}">
+            </div>
+            <div class="form-group d-flex justify-content-between">
+                <a href="{% url 'signature_list' %}" class="button-link" style="background-color: white; color: #007bff; border: 1px solid #007bff; padding: 10px 20px; border-radius: 4px; text-decoration: none; font-size: 16px;">
+                    Cancel
+                </a>
+                {% comment %} <a href="{% url 'banner_list' %}" class="button-link">banner list</a> {% endcomment %}
+                <button type="submit" style="background-color: #002D62; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 16px;">
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="bottom-foot-wrapper">
+        <div class="site-width">
+            <div class="menu-sub-footer-container">
+                <ul>
+                    <li>
+                        <span class="menu-txt-wrapper">© 2024 LINDAL Group</span>
+                    </li>
+                    <li>
+                        <span>Privacy policy</span>
+                    </li>
+                    <li>
+                        <span>Terms And Conditions</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const signatureType = document.querySelector('select[name="{{ form.signature_type.name }}"]');
+            const bannerContainer = document.getElementById('banner-container');
+
+            signatureType.addEventListener('change', function() {
+                bannerContainer.style.display = this.value === 'detailed_with_banner' ? 'block' : 'none';
+            });
+
+            const carouselItems = document.querySelectorAll('.carousel-item img');
+            const hiddenInput = document.getElementById('{{ form.banner.id_for_label }}');
+
+            carouselItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const bannerId = this.getAttribute('data-id');
+                    hiddenInput.value = bannerId; // Set the selected banner ID in the hidden input
+
+                    carouselItems.forEach(i => {
+                        i.style.opacity = '0.5'; // Dim all images
+                    });
+
+                    this.style.opacity = '2'; // Highlight selected image
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

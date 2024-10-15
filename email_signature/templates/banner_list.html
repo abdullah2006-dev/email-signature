@@ -1,0 +1,10 @@
+{% comment %} <!-- banner_list.html -->
+<h2>Uploaded Banners</h2> 
+<ul>
+    {% for banner in banners %}
+        <li><img src="{{ banner.image.url }}" alt="Banner {{ banner.id }}" /></li>
+        <a href="{% url 'confirm_dlete' banner.id %}" class="button-link">Delete</a>  
+    {% endfor %}
+    {% comment %} <a href="{% url 'upload_banner' %}" class="button-link">upload banner</a> {% endcomment %}
+    {% comment %} <a href="{% url 'create_signature' %}" class="button-link">back</a> {% endcomment %}
+</ul> {% endcomment %}

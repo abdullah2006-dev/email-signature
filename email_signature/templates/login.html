@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Caansoft">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            color: #444;
+            margin: 0;
+            padding: 0;
+            background-color: white-smoke;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: #002D62;
+        }
+        #header-right {
+            color: white;
+        }
+        header img {
+            max-height: 50px;
+        }
+        #main-wrap {
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 27px;
+            color: rgba(0, 0, 0, 0.65);
+        }
+        p {
+            font-size: 16px;
+            color: rgba(0, 0, 0, 0.64);
+        }
+        .reset-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .form-group {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+            gap: 10px; /* Space between the fields */
+        }
+        .input-field {
+            flex: 1;
+            min-width: 120px;
+            background-color: lightgray;
+            border: none;
+            color: black;
+            padding: 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .btn {
+            background-color: gray;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 24px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background-color: darkgray;
+        }
+        .bottom-foot-wrapper {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px 0;
+            background-color: #002D62;
+        }
+        .menu-sub-footer-container ul {
+            list-style-type: none;
+            padding: 0;
+            color: white;
+        }
+        .menu-sub-footer-container li {
+            display: inline;
+            margin: 0 10px;
+        }
+        .w3-border {
+            border: 1px solid #ccc ;
+            background-color: #7CB9E8;
+            max-width: 30%;
+            margin-left: 520px;
+        }
+
+        .w3-grey, .w3-hover-grey:hover, .w3-gray, .w3-hover-gray:hover {
+            color: #00308F;
+            background-color: #00308F;
+            width: 250px
+            margin-left: 100px;
+        }
+    </style>
+</head>
+<body>
+<div id="header-wrap">
+    <header id="header" class="clearfix">
+        <div id="header-left" class="clearfix">
+            <a href="https://www.lindalgroup.com/" target="_blank" id="viewLogo">
+                <img src="https://www.lindalgroup.com/site/wp-content/themes/Lindal/images/Lindal-Logo.svg" alt="">
+            </a>
+        </div>
+        <div id="header-right">
+            <span class="innovation-text">Your Innovation Partner</span>
+        </div>
+    </header>
+</div>
+<div id="main-wrap">
+    <div id="main" class="clearfix">
+        <section id="contents">
+            <div class="sm-centered">
+                <div class="colored-border">
+                    <img class="d-logo-centered" src="/static/images/aaron-burden-b9drVB7xIOI-unsplash%20(2).jpg" alt="3D Aerosol Configurator" style="max-width: 400px; height: auto;">
+                    <p style="max-width: 400px; text-align: center; margin: 0 auto;">
+                        Welcome to LINDAL’s 3D Aerosol Configurator. Please fill in your credentials below to access the configurator. For new users, please contact your regional sales contact who can register you to the platform.<br><br>
+                        By clicking on login, I accept the privacy policy and terms and conditions of LINDAL's 3D Aerosol Configurator service.
+                    </p>
+                    <div class="alert alert-danger hidden" id="errorLogin">
+                        <p class="mb-0"></p>
+                    </div>
+                    <div class="w3-border">
+                        <div class="w3-grey" style="height:15px;width:20%"></div>
+                    </div>
+                </div>
+            <div class="sm-centered">
+                <form action="" method="post" class="reset-form" id="loginForm">
+                    {% csrf_token %}
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                    <div class="form-group">
+                        <input class="input-field" type="text" name="username" id="username" placeholder="Username" required>
+                        {{ form.username.errors }}
+                        <input class="input-field" type="password" name="password" id="password" placeholder="Password" required>
+                        {{ form.password.errors }}
+                    </div>
+                    <div class="form-group">
+                        <button class="btn" type="submit">Login</button>
+                    </div>
+                </form>
+                <div style="margin-bottom: 20px;">
+                    <p>Don't have an account? <a href="{% url 'signup' %}" style="color: #002D62; font-weight: bold; text-decoration: none;">Sign up</a></p>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+</section>
+</div>
+</div>
+<br>
+<br>
+<br>
+<div class="bottom-foot-wrapper">
+<div class="site-width">
+<div class="menu-sub-footer-container">
+<ul>
+    <li>
+        <span class="menu-txt-wrapper">© 2024 LINDAL Group</span>
+    </li>
+    <li>
+        <span>Privacy policy</span>
+    </li>
+    <li>
+        <span>Terms And Conditions</span>
+    </li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>
+
+

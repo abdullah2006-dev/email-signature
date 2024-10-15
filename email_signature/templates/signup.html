@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Caansoft">
+    <title>Sign up</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            color: #444;
+            margin: 0;
+            padding: 0;
+            background-color: white-smoke;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: #002D62;
+        }
+        #header-right {
+            color: white;
+        }
+        header img {
+            max-height: 50px;
+        }
+        #main-wrap {
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 27px;
+            color: rgba(0, 0, 0, 0.65);
+        }
+        p {
+            font-size: 16px;
+            color: rgba(0, 0, 0, 0.64);
+        }
+        .reset-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .form-group {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+        .input-field {
+            flex: 1;
+            min-width: 120px;
+            background-color: lightgray;
+            border: none;
+            color: black;
+            padding: 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .username {
+            flex: 2;
+        }
+        .right {
+            display: flex;
+            justify-content: center;
+            margin-left: 10px;
+        }
+        .btn-signup {
+            padding: 10px 20px;
+            font-weight: bold;
+        }
+        .btn {
+            background-color: gray;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 24px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background-color: gray;
+        }
+        .bottom-foot-wrapper {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px 0;
+            background-color: #002D62;
+        }
+        .menu-sub-footer-container ul {
+            list-style-type: none;
+            padding: 0;
+            color: white;
+        }
+        .menu-sub-footer-container li {
+            display: inline;
+            margin: 0 10px;
+        }
+        .menu-sub-footer-container a {
+            text-decoration: none;
+            color: #555;
+        }
+        .alert {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .hidden {
+            display: none;
+        }
+        .right {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: 290px;
+        }
+        .forgot-password-link {
+            font-size: 14px;
+        }
+        #errorLogin {
+            border: 4.8px solid #66a3ff; /* Light blue border */
+            background-color: #66a3ff; /* Light blue background */
+            color: #000000; /* Black text for contrast */
+            padding: 10px; /* Padding around the text */
+            border-radius: 5px; /* Optional: Rounded corners */
+        }
+        .w3-border {
+            border: 1px solid #ccc ;
+            background-color: #7CB9E8;
+            max-width: 30%;
+            margin-left: 520px;
+        }
+
+        .w3-grey, .w3-hover-grey:hover, .w3-gray, .w3-hover-gray:hover {
+            color: #00308F;
+            background-color: #00308F;
+            width: 250px
+            margin-left: 100px;
+        }
+    </style>
+</head>
+<body class="page-readonly p-fixed">
+<div id="header-wrap">
+    <header id="header" class="clearfix">
+        <div id="header-left" class="clearfix">
+            <a href="https://www.lindalgroup.com/" target="_blank" id="viewLogo">
+                <img src="https://www.lindalgroup.com/site/wp-content/themes/Lindal/images/Lindal-Logo.svg" alt="">
+            </a>
+        </div>
+        <div id="header-right">
+            <span class="innovation-text">Your Innovation Partner</span>
+        </div>
+    </header>
+</div>
+<div id="main-wrap">
+    <div id="main" class="clearfix">
+        <section id="contents">
+            <div class="sm-centered">
+                <div class="colored-border">
+                    <img class="d-logo-centered" src="static/images/aaron-burden-b9drVB7xIOI-unsplash (2).jpg" alt="3D Aerosol Configurator" style="max-width: 400px; height: auto;">
+                    <p style="max-width: 400px; text-align: center; margin: 0 auto;">
+                        Welcome to LINDAL’s 3D Aerosol Configurator. Please fill in your credentials below to access the configurator. For new users, please contact your regional sales contact who can register you to the platform.<br><br>
+                        By clicking on login, I accept the privacy policy and terms and conditions of LINDAL's 3D Aerosol Configurator service.
+                    </p>
+                    <div class="alert alert-danger hidden" id="errorLogin">
+                        <p class="mb-0"></p>
+                    </div>
+                </br>
+                    <div class="w3-border">
+                        <div class="w3-grey" style="height:15px;width:20%"></div>
+                    </div>
+                </div>
+                <form action="" method="post" class="bg-pattern reset-form" id="signupForm">
+                    {% csrf_token %}
+                    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                    {{ form.non_field_errors }}
+                    <div class="form-group">
+                        <div class="input-container">
+                            <input class="input-field username" type="text" name="username" id="username" placeholder="Username" required>
+                            {{ form.username.errors }} </br>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-field" type="email" name="email" id="email" placeholder="Email" required>
+                            {{ form.email.errors }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-container">
+                            <input class="input-field" type="password" name="password1" id="password1" placeholder="Password" required>
+                            {{ form.password1.errors }} </br>
+                        </div>
+                        <div class="input-container">
+                            <input class="input-field" type="password" name="password2" id="password2" placeholder="Confirm Password" required>
+                            {{ form.password2.errors }}
+                        </div>
+                    </div>
+                    <div class="right">
+                        <button class="btn btn-submit btn-signup" type="submit" id="signup">Sign Up</button>
+                    </div>
+                </form>
+                <div style="margin-bottom: 20px;">
+                    <p>Already have an account?<a href="{% url 'login' %}" style="color: #002D62; font-weight: bold; text-decoration: none;">Sign up</a></p>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<br>
+<br>
+<div class="bottom-foot-wrapper">
+    <div class="site-width">
+        <div class="menu-sub-footer-container">
+            <ul>
+                <li>
+                    <span class="menu-txt-wrapper">© 2024 LINDAL Group</span>
+                </li>
+                <li>
+                    <span>Privacy policy</span>
+                </li>
+                <li>
+                    <span>Terms And Conditions</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

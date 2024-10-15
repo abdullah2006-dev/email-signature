@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirm Deletion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 70%;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: #002D62;
+        }
+        #header-right {
+            color: white;
+        }
+        header img {
+            max-height: 50px;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3
+        }
+
+        .button-link {
+            display: inline-block;
+            background-color: #fff; /* White color for cancel button */
+            color: #002D62; /* Header text color */
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 10px;
+            border: 1px solid #002D62; /* Border to match header */
+        }
+
+        .button-link:hover {
+            background-color: #f4f4f9; /* Light gray hover effect */
+        }
+        
+        .bottom-foot-wrapper {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px 0;
+            background-color: #002D62;
+        }
+        .menu-sub-footer-container ul {
+            list-style-type: none;
+            padding: 0;
+            color: white;
+        }
+        .menu-sub-footer-container li {
+            display: inline;
+            margin: 0 10px;
+        }
+        .menu-sub-footer-container a {
+            text-decoration: none;
+            color: #555;
+        }
+    </style>
+</head>
+<body class="page-readonly p-fixed">
+    <div id="header-wrap">
+        <header id="header" class="clearfix">
+            <div id="header-left" class="clearfix">
+                <a href="https://www.lindalgroup.com/" target="_blank" id="viewLogo">
+                    <img src="https://www.lindalgroup.com/site/wp-content/themes/Lindal/images/Lindal-Logo.svg" alt="">
+                </a>
+            </div>
+            <div id="header-right">
+                <span class="innovation-text">Your Innovation Partner</span>
+            </div>
+        </header>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="container">
+        <h1>Confirm Deletion</h1>
+        <p>Are you sure you want to delete the signature for "{{ signature.name }}"?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" style="background-color: #002D62; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 16px;">Delete</button>
+        </form>
+        <br>
+        <a href="{% url 'signature_list' %}" class="button-link">Cancel</a>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="bottom-foot-wrapper">
+        <div class="site-width">
+            <div class="menu-sub-footer-container">
+                <ul>
+                    <li>
+                        <span class="menu-txt-wrapper">© 2024 LINDAL Group</span>
+                    </li>
+                    <li>
+                        <span>Privacy policy</span>
+                    </li>
+                    <li>
+                        <span>Terms And Conditions</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

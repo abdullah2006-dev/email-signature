@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Signatures</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* Center items vertically */
+            padding: 20px;
+            background: #002D62;
+            position: fixed; /* Change to fixed */
+            top: 0; /* Stick to the top */
+            left: 0; /* Align with left edge */
+            right: 0; /* Align with right edge */
+            z-index: 2; /* Keep it above other elements */
+        }
+        .menu-toggle {
+            font-size: 24px; /* Increased size */
+            color: white; /* Change color to white */
+            cursor: pointer;
+        }
+        #header-right {
+            color: white;
+            text-align: right; /* Align text to the right */
+        }
+        .innovation-text {
+            font-size: 20px; /* Adjust font size if needed */
+        }
+        .header-title {
+            color: #002D62; /* Change header color to match the header */
+            margin: 20px 0; /* Add margin for spacing */
+            font-size: 30px;
+            font-weight: 800;
+            text-align: center;
+        }
+        .sidebar {
+            width: 250px; /* Sidebar width */
+            background-color: #002D62;
+            color: #fff;
+            padding: 20px;
+            height: 100%;
+            position: fixed;
+            top: -100%;
+            left: 0;
+            transition: top 0.3s ease, width 0.3s ease; /* Added width transition */
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+            z-index: 1;
+        }
+        
+        .sidebar.active {
+            top: 0; /* Position when active */
+            /* Optional: Increase width for larger sidebar */
+            width: 300px; /* Example larger width */
+        }
+        .sidebar h2 {
+            color: #fff;
+            font-size: 28px; /* Increased size */
+            margin-bottom: 20px;
+        }
+        .close-button {
+            font-size: 24px; /* Increased size */
+            color: white; /* Change color to white */
+            cursor: pointer;
+            margin-bottom: 10px; /* Add space below */
+        }
+        .sidebar a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            transition: background 0.3s;
+        }
+        .sidebar a:hover {
+            background: #0056b3;
+        }
+        .main-content {
+            margin-top: 80px; /* Add top margin equal to the header height */
+            transition: margin-left 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .signature-container {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px; /* Rounded corners */
+            padding: 20px; /* Increased padding */
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 600px;
+            max-widt: 600px;
+            text-align: left;
+        }
+        .signature-container a.website-link {
+            color: green; /* Set the color to green */
+            text-decoration: underline; /* Optional: Underline the link */
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: space-between; /* Align buttons */
+            margin-top: 15px; /* Space above buttons */
+        }
+        .button-link {
+            background-color: #002D62; /* Header color */
+            color: white; /* White text */
+            padding: 10px 15px; /* Padding for buttons */
+            border-radius: 4px; /* Rounded corners */
+            text-decoration: none; /* Remove underline */
+            transition: background 0.3s;
+        }
+        .button-link:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+        }
+        .bottom-foot-wrapper {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px 0;
+            background-color: #002D62;
+            color: white;
+        }
+        .menu-sub-footer-container ul {
+            list-style-type: none;
+            padding: 0;
+            color: white;
+        }
+        .menu-sub-footer-container li {
+            display: inline;
+            margin: 0 10px;
+        }
+        .menu-sub-footer-container a {
+            text-decoration: none;
+            color: white;
+        }
+        .signature-container h1, 
+        .signature-container h4 {
+            color: #002D62; /* Set the color to #002D62 */
+        }
+    </style>
+</head>
+<body>
+    <div id="header-wrap">
+        <header id="header" class="clearfix">
+            <div class="menu-toggle" id="menuToggle">&#9776;</div>
+            <div id="header-right">
+                <span class="innovation-text">Your Innovation Partner</span>
+            </div>
+        </header>
+    </div>
+    <div class="sidebar" id="sidebar">
+        <div class="close-button" id="closeButton">&times;</div>
+        <h2>Menu</h2>
+        <a href="{% url 'create_signature' %}" class="button-link">Create New Signature</a>
+        <a href="{% url 'logout' %}" class="button-link">Logout</a>
+    </div>
+    
+    <div class="main-content" id="mainContent">
+        <h1 class="header-title">Email Signatures</h1>
+        <ul>
+            {% for signature in signatures %}
+                <li class="signature-container">
+                    <div>
+                        <h1>{{ signature.name }} {{ signature.surname }}</h1>
+                        <h4>Function: {{ signature.function|default:"Not provided" }}</h4>
+                        {% if signature.signature_type == 'minimal' %}
+                            Mobile: ({{ signature.country_code }}) (0) {{ signature.mobile|default:"Not provided" }}<br>
+                        {% endif %}
+                        {% if signature.signature_type == 'detailed' or signature.signature_type == 'detailed_with_banner' %}
+                            {% if signature.company %}
+                                <h3>Company: {{ signature.company }}</h3>
+                            {% endif %}
+                            {% if signature.company.address %}
+                                Company Address: {{ signature.company.address }}<br>
+                            {% endif %}
+                            {% if signature.mobile %}
+                            Mobile: ({{ signature.country_code }}) (0) {{ signature.mobile|default:"Not provided" }}<br>
+                            {% endif %}
+                            {% if signature.phone %}
+                                Phone: ({{ signature.country_code }}) (0) {{ signature.phone|default:"Not provided" }}<br>
+                            {% endif %}
+                            {% if signature.email %}
+                                Email: {{ signature.email }}<br><br>
+                            {% endif %}
+                            {% if signature.signature_type == 'detailed_with_banner' %}
+                                {% if signature.website %}
+                                    Website: <a href="{{ signature.website }}" class="website-link">{{ signature.website }}</a><br>
+                                {% endif %}
+                                {% if signature.banner %}
+                                    <img src="{{ signature.banner.image.url }}" alt="Banner"><br>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                        <div class="action-buttons">
+                            <a href="{% url 'delete_signature' signature.pk %}" class="button-link delete-button">Delete</a>
+                            <a href="#" class="button-link download-button" data-signature='{
+                                "name": "{{ signature.name }}", 
+                                "surname": "{{ signature.surname|default:"Not provided" }}", 
+                                "function": "{{ signature.function|default:"Not provided" }}", 
+                                "signature_type": "{{ signature.signature_type }}", 
+                                {% if signature.signature_type == "minimal" %}
+                                    "company": "Not provided", 
+                                    "company_address": "Not provided", 
+                                    "country_code": "{{ signature.country_code|default:"" }}", 
+                                    "mobile": "{{ signature.mobile|default:"Not provided" }}",
+                                    "phone": "Not provided",  
+                                    "email": "Not provided", 
+                                    "website": "Not provided"
+                                {% elif signature.signature_type == "detailed" %}
+                                    "company": "{{ signature.company|default:"Not provided" }}", 
+                                    "company_address": "{{ signature.company.address|default:"Not provided" }}", 
+                                    "country_code": "{{ signature.country_code|default:"" }}", 
+                                    "mobile": "{{ signature.mobile|default:"Not provided" }}",
+                                    "phone": "{{ signature.phone|default:"Not provided" }}",  
+                                    "email": "{{ signature.email|default:"Not provided" }}", 
+                                    "website": "Not provided"
+                                {% elif signature.signature_type == "detailed_with_banner" %}
+                                    "company": "{{ signature.company|default:"Not provided" }}", 
+                                    "company_address": "{{ signature.company.address|default:"Not provided" }}", 
+                                    "country_code": "{{ signature.country_code|default:"" }}", 
+                                    "mobile": "{{ signature.mobile|default:"Not provided" }}",
+                                    "phone": "{{ signature.phone|default:"Not provided" }}",  
+                                    "email": "{{ signature.email|default:"Not provided" }}", 
+                                    "website": "{{ signature.website|default:"Not provided" }}",
+                                    "banner": {
+                                        "image": {
+                                            "url": "{{ signature.banner.image.url|default:"" }}"
+                                        }
+                                    }
+                                {% endif %}
+                            }'>Download</a>
+                            <button class="button-link copy-button" 
+                                data-signature='{
+                                    "name": "{{ signature.name }}", 
+                                    "surname": "{{ signature.surname|default:"Not provided" }}", 
+                                    "function": "{{ signature.function|default:"Not provided" }}", 
+                                    "signature_type": "{{ signature.signature_type }}", 
+                                    {% if signature.signature_type == "minimal" %}
+                                        "company": "Not provided", 
+                                        "company_address": "Not provided", 
+                                        "country_code": "{{ signature.country_code|default:"" }}", 
+                                        "mobile": "{{ signature.mobile|default:"Not provided" }}",
+                                        "phone": "Not provided",  
+                                        "email": "Not provided", 
+                                        "website": "Not provided"
+                                    {% elif signature.signature_type == "detailed" %}
+                                        "company": "{{ signature.company|default:"Not provided" }}", 
+                                        "company_address": "{{ signature.company.address|default:"Not provided" }}", 
+                                        "country_code": "{{ signature.country_code|default:"" }}", 
+                                        "mobile": "{{ signature.mobile|default:"Not provided" }}",
+                                        "phone": "{{ signature.phone|default:"Not provided" }}",  
+                                        "email": "{{ signature.email|default:"Not provided" }}", 
+                                        "website": "Not provided"
+                                    {% elif signature.signature_type == "detailed_with_banner" %}
+                                        "company": "{{ signature.company|default:"Not provided" }}", 
+                                        "company_address": "{{ signature.company.address|default:"Not provided" }}", 
+                                        "country_code": "{{ signature.country_code|default:"" }}", 
+                                        "mobile": "{{ signature.mobile|default:"Not provided" }}",
+                                        "phone": "{{ signature.phone|default:"Not provided" }}",  
+                                        "email": "{{ signature.email|default:"Not provided" }}", 
+                                        "website": "{{ signature.website|default:"Not provided" }}"
+                                    {% endif %}
+                                }'>Copy</button>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <div class="bottom-foot-wrapper">
+        <div class="menu-sub-footer-container">
+            <ul>
+                <li><span class="menu-txt-wrapper">© 2024 LINDAL Group</span></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms And Conditions</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar toggle functionality
+        const menuToggle = document.getElementById('menuToggle');
+        const closeButton = document.getElementById('closeButton');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            mainContent.style.marginLeft = sidebar.classList.contains('active') ? '250px' : '0';
+        });
+
+        closeButton.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            mainContent.style.marginLeft = '0';
+        });
+
+        document.querySelectorAll('.copy-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const signatureData = button.getAttribute('data-signature');
+                const signature = JSON.parse(signatureData);
+                
+                const tempDiv = document.createElement('div');
+                let htmlToCopy = `
+                    <div style="font-family: Arial, sans-serif; color: #002D62;">
+                        <h1 style="color: #002D62; font-size: 24px; margin: 0;">${signature.name || 'Not provided'} ${signature.surname || 'Not provided'}</h1>
+                        <h5 style="color: #002D62; font-size: 20px; margin: 0;">Function: ${signature.function || 'Not provided'}</h5>
+                        <br>
+                `;
+                
+                if (signature.signature_type === 'minimal') {
+                    htmlToCopy += `
+                        <p style="margin: 5px 0;">Mobile: ${signature.country_code ? `(${signature.country_code}) (0) ${signature.mobile || 'Not provided'}` : 'Not provided'}</p>
+                    `;
+                } else {
+                    htmlToCopy += `
+                        <h4 style="color: #000; font-size: 22px; margin: 0;">Company: ${signature.company || 'Not provided'}</h4>
+                        <p style="margin: 5px 0;">Company Address: ${signature.company_address || 'Not provided'}</p>
+                        <p style="margin: 5px 0;">Mobile: ${signature.country_code ? `(${signature.country_code}) (0) ${signature.mobile || 'Not provided'}` : 'Not provided'}</p>
+                        <p style="margin: 5px 0;">Phone: ${signature.country_code ? `(${signature.country_code}) (0) ${signature.phone || 'Not provided'}` : 'Not provided'}</p>
+                        <p style="margin: 5px 0;">Email: ${signature.email || 'Not provided'}</p>
+                    `;
+                    if (signature.signature_type === 'detailed_with_banner') {
+                        htmlToCopy += `
+                            <p style="margin: 5px 0;">Website: <a href="${signature.website || '#'}" style="color: green;">${signature.website || 'Not provided'}</a></p>
+                        `;
+                    }
+                }
+                htmlToCopy += `</div>`;
+                
+                tempDiv.innerHTML = htmlToCopy;
+                document.body.appendChild(tempDiv);
+        
+                navigator.clipboard.write([new ClipboardItem({
+                    'text/html': new Blob([tempDiv.innerHTML], { type: 'text/html' }),
+                    'text/plain': new Blob([tempDiv.innerText], { type: 'text/plain' })
+                })]).then(() => {
+                    alert('Signature copied to clipboard! You can paste it in your email client.');
+                }).catch(err => {
+                    console.error('Error copying to clipboard: ', err);
+                }).finally(() => {
+                    document.body.removeChild(tempDiv); // Clean up
+                });
+            });
+        });
+        document.querySelectorAll('.download-button').forEach(button => {
+            button.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevent the default anchor action
+                const signatureData = button.getAttribute('data-signature');
+                const signature = JSON.parse(signatureData);
+        
+                // Determine canvas size based on signature type
+                let width, height;
+                if (signature.signature_type === 'minimal') {
+                    width = 800;
+                    height = 200; // Smaller height for minimal
+                } else if (signature.signature_type === 'detailed') {
+                    width = 800;
+                    height = 300; // Height adjusted for detailed
+                } else {
+                    width = 800;
+                    height = 600; // Height for detailed_with_banner
+                }
+        
+                // Create a canvas
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = width;
+                canvas.height = height;
+        
+                // Set background
+                ctx.fillStyle = '#ffffff'; // White background
+                ctx.fillRect(0, 0, width, height);
+        
+                // Function to draw signature text
+                function drawSignatureText(yOffset) {
+                    ctx.fillStyle = '#002D62'; // Set the text color
+                    ctx.font = 'bold 30px Arial'; // Set the font size and style
+        
+                    const nameYPosition = yOffset + 40; // Move the name down by 40 pixels
+                    ctx.fillText(`${signature.name || 'Not provided'} ${signature.surname || 'Not provided'}`, 20, nameYPosition);
+                    
+                    ctx.font = '15px Arial';
+                    ctx.fillText(`Function: ${signature.function || 'Not provided'}`, 20, nameYPosition + 30);
+                    
+                    let currentY = nameYPosition + 60; // Update current Y position for the next lines
+                    
+                    // Add space after Function
+                    currentY += 20; // Add extra space before the Company field
+                    
+                    if (signature.signature_type === 'minimal') {
+                        ctx.fillStyle = '#000';
+                        ctx.fillText(`Mobile: ${signature.country_code ? `(${signature.country_code}) (0) ${signature.mobile || 'Not provided'}` : 'Not provided'}`, 20, currentY);
+                    } else if (signature.signature_type === 'detailed' || signature.signature_type === 'detailed_with_banner') {
+                        ctx.fillStyle = '#000';
+                        ctx.font = 'Bold 24px Arial';
+                        ctx.fillText(`Company: ${signature.company || 'Not provided'}`, 20, currentY);
+                        currentY += 30; // Increase Y position for next line
+                        ctx.fillStyle = '#000';
+                        ctx.font = '15px Arial';
+                        ctx.fillText(`Company Address: ${signature.company_address || 'Not provided'}`, 20, currentY);
+                        currentY += 30;
+                        ctx.fillStyle = '#000';
+                        ctx.font = '15px Arial';
+                        ctx.fillText(`Mobile: ${signature.country_code ? `(${signature.country_code}) (0) ${signature.mobile || 'Not provided'}` : 'Not provided'}`, 20, currentY);
+                        currentY += 30;
+                        ctx.fillStyle = '#000';
+                        ctx.font = '15px Arial';
+                        ctx.fillText(`Phone: ${signature.country_code ? `(${signature.country_code}) (0) ${signature.phone || 'Not provided'}` : 'Not provided'}`, 20, currentY);
+                        currentY += 30;
+                        ctx.fillStyle = '#000';
+                        ctx.font = '15px Arial';
+                        ctx.fillText(`Email: ${signature.email || 'Not provided'}`, 20, currentY);
+                        currentY += 30; // Move down for the website link
+                    
+                        // Add space between Email and Website
+                        currentY += 20; // Adjust this value for desired spacing
+                    
+                        // Draw website link for detailed signatures
+                        if (signature.signature_type === 'detailed_with_banner') {
+                            ctx.fillStyle = 'green';
+                            ctx.fillText(`Website: ${signature.website || 'Not provided'}`, 20, currentY);
+                            currentY += 30; // Move Y position down for the banner
+                        }
+                    }
+                    return currentY; // Return the new Y position for further drawing
+                }
+        
+                // Draw the signature text first
+                let currentY = drawSignatureText(20); // Start drawing text from top
+        
+                // Draw banner image if available for "detailed_with_banner"
+                if (signature.signature_type === 'detailed_with_banner' && signature.banner && signature.banner.image && signature.banner.image.url) {
+                    const bannerImage = new Image();
+                    bannerImage.onload = () => {
+                        const bannerHeight = 250; // Set banner height
+                        const bannerWidth = 250; // Set a smaller banner width (modify this value as needed)
+                
+                        // Maintain aspect ratio if needed
+                        const aspectRatio = bannerImage.width / bannerImage.height;
+                        const adjustedHeight = bannerWidth / aspectRatio; // Calculate height based on width
+                        
+                        const adjustedX = 20;
+
+                        ctx.drawImage(bannerImage, adjustedX, currentY, bannerWidth, adjustedHeight); // Draw with adjusted width and height
+                        triggerDownload(canvas, signature);
+                    };
+                    bannerImage.src = signature.banner.image.url;
+                } else {
+                    // If no banner or for minimal, trigger the download without it
+                    triggerDownload(canvas, signature);
+                }
+            });
+        });
+        // Function to trigger the download
+        function triggerDownload(canvas, signature) {
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${signature.name || 'signature'}_${signature.surname || 'signature'}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url); // Clean up
+            }, 'image/png');
+        }      
+    </script>        
+</body>
+</html>
